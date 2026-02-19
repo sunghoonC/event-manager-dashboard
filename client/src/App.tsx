@@ -2,7 +2,7 @@ import { ApolloProvider } from "@apollo/client/react";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
-import { Route, Switch, Redirect } from "wouter";
+import { Route, Switch, Redirect, Router as WouterRouter } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
@@ -61,18 +61,22 @@ function Router() {
   );
 }
 
+const base = import.meta.env.BASE_URL.replace(/\/$/, '') || '';
+
 function App() {
   return (
     <ErrorBoundary>
       <ApolloProvider client={apolloClient}>
-        <ThemeProvider defaultTheme="light">
-          <AuthProvider>
-            <TooltipProvider>
-              <Toaster />
-              <Router />
-            </TooltipProvider>
-          </AuthProvider>
-        </ThemeProvider>
+        <WouterRouter base={base}>
+          <ThemeProvider defaultTheme="light">
+            <AuthProvider>
+              <TooltipProvider>
+                <Toaster />
+                <Router />
+              </TooltipProvider>
+            </AuthProvider>
+          </ThemeProvider>
+        </WouterRouter>
       </ApolloProvider>
     </ErrorBoundary>
   );
